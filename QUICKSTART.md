@@ -1,6 +1,5 @@
 # Quick Start Guide (Pre-Built Data)
 
-Your friend can skip all the data processing and get running in 5 minutes.
 
 ## Setup
 
