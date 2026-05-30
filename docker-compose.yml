@@ -9,7 +9,7 @@ services:
       - ./chroma_db:/app/chroma_db          # persist vector DB
       - ./monster_catalog.json:/app/monster_catalog.json
       - ./monsters_know_posts.json:/app/monsters_know_posts.json
-      - hf_cache:/cache/hf                  # persist downloaded models
+      - hf_cache:/app/cache/hf              # persist downloaded models
     env_file:
       - .env
     healthcheck:

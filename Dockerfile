@@ -12,9 +12,15 @@ RUN pip install --no-cache-dir -r requirements.txt uvicorn[standard] fastapi
 
 COPY . .
 
-# ChromaDB data and HuggingFace model cache are volume-mounted
-ENV TRANSFORMERS_CACHE=/cache/hf
-ENV HF_HOME=/cache/hf
+# Download pre-built data bundle if not present (for Railway/cloud deploys)
+RUN if [ ! -f monster_catalog.json ]; then \
+        echo "Downloading data bundle..." && \
+        curl -L https://github.com/LinkVanyali/monster-generator/releases/download/v1.0.0/monster-generator-data.tar.gz | tar xz; \
+    fi
+
+# ChromaDB data and HuggingFace model cache
+ENV TRANSFORMERS_CACHE=/app/cache/hf
+ENV HF_HOME=/app/cache/hf
 
 EXPOSE 8765
 
