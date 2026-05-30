@@ -2,7 +2,7 @@
   "id": "monster-generator",
   "title": "AI Monster Generator",
   "description": "Generate D&D 5e monsters and encounters via Claude AI, directly into your world.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": {
     "minimum": "11",
     "verified": "12"

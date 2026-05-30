@@ -185,7 +185,9 @@ class EncounterDialog extends Dialog {
 // ---------------------------------------------------------------------------
 
 Hooks.on("renderActorDirectory", (app, html) => {
-  const header = html.find(".directory-header .header-actions");
+  // Foundry v12+ passes plain DOM element, not jQuery
+  const $html = html instanceof jQuery ? html : $(html);
+  const header = $html.find(".directory-header .header-actions");
 
   const genBtn = $(
     `<button class="mgen-btn" title="${game.i18n.localize("MGEN.Generate")}">
