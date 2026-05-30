@@ -12,11 +12,13 @@ RUN pip install --no-cache-dir -r requirements.txt uvicorn[standard] fastapi
 
 COPY . .
 
-# Download pre-built data bundle if not present (for Railway/cloud deploys)
-RUN if [ ! -f monster_catalog.json ]; then \
-        echo "Downloading data bundle..." && \
-        curl -L https://github.com/LinkVanyali/monster-generator/releases/download/v1.0.0/monster-generator-data.tar.gz | tar xz; \
-    fi
+# Download pre-built data bundle (mandatory for cloud deploys)
+RUN echo "Downloading data bundle..." && \
+    curl -fL https://github.com/LinkVanyali/monster-generator/releases/download/v1.0.0/monster-generator-data.tar.gz -o /tmp/data.tar.gz && \
+    tar -xzf /tmp/data.tar.gz && \
+    rm /tmp/data.tar.gz && \
+    ls -lh chroma_db/ monster_catalog.json monsters_know_posts.json && \
+    echo "Data bundle extracted successfully"
 
 # ChromaDB data and HuggingFace model cache
 ENV TRANSFORMERS_CACHE=/app/cache/hf
