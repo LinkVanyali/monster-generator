@@ -16,6 +16,6 @@
     "path": "lang/en.json"
   }],
   "url": "https://github.com/LinkVanyali/monster-generator",
-  "manifest": "https://raw.githubusercontent.com/LinkVanyali/monster-generator/main/foundry-module/module.json",
+  "manifest": "https://github.com/LinkVanyali/monster-generator/releases/latest/download/module.json",
   "download": "https://github.com/LinkVanyali/monster-generator/releases/download/v1.0.0/monster-generator-foundry.zip"
 }

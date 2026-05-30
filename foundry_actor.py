@@ -147,6 +147,61 @@ def _parse_damage_parts(damage_dice: Optional[str], description: str) -> list:
     return parts if parts else [[damage_dice, ""]]
 
 
+def _build_spellcasting(spellcasting) -> dict:
+    """Build the spells object for dnd5e actor system."""
+    if not spellcasting:
+        return {}
+
+    # Map ability name to dnd5e key
+    ability_map = {
+        "intelligence": "int", "wisdom": "wis", "charisma": "cha",
+        "int": "int", "wis": "wis", "cha": "cha",
+    }
+    ability_key = ability_map.get(spellcasting.ability.lower(), "int")
+
+    # Build spell slots
+    slots = {}
+    if spellcasting.spell_slots:
+        for level_str, spell_list in spellcasting.spell_slots.items():
+            if level_str.isdigit():
+                level_int = int(level_str)
+                if 1 <= level_int <= 9:
+                    # Estimate slots based on number of spells (rough heuristic)
+                    slot_count = max(len(spell_list), 2)
+                    slots[f"spell{level_int}"] = {
+                        "value": slot_count,
+                        "max": slot_count,
+                        "override": None,
+                    }
+
+    return {
+        "ability": ability_key,
+        "dc": spellcasting.spell_save_dc or 10,
+        "modifier": spellcasting.spell_attack_bonus or 0,
+        **slots,
+    }
+
+
+def _make_spell_item(name: str, level: int, preparation: str) -> dict:
+    """Create a spell item for Foundry."""
+    return {
+        "name": name,
+        "type": "spell",
+        "system": {
+            "description": {"value": "", "chat": ""},
+            "source": {"custom": ""},
+            "level": level,
+            "school": "",
+            "preparation": {"mode": preparation, "prepared": True},
+            "components": {"vocal": False, "somatic": False, "material": False},
+            "duration": {"value": "", "units": ""},
+            "range": {"value": None, "units": ""},
+            "target": {"value": None, "type": ""},
+            "activation": {"type": "action", "cost": 1},
+        },
+    }
+
+
 def _make_feat_item(name: str, description: str) -> dict:
     return {
         "name": name,
@@ -236,6 +291,20 @@ def to_dnd5e_actor(
 
     # Build items list
     items = []
+
+    # Spellcasting
+    if monster.spellcasting:
+        sc = monster.spellcasting
+        # Add spells as spell items
+        for spell_name in (sc.at_will or []):
+            items.append(_make_spell_item(spell_name, level=0, preparation="atwill"))
+        for spell_name in (sc.innate_spells or []):
+            items.append(_make_spell_item(spell_name, level=0, preparation="innate"))
+        for level, spell_list in (sc.spell_slots or {}).items():
+            spell_level = int(level) if level.isdigit() else 0
+            for spell_name in spell_list:
+                items.append(_make_spell_item(spell_name, level=spell_level, preparation="prepared"))
+
     # Traits as feats
     for t in monster.traits:
         items.append(_make_feat_item(t.get("name", ""), t.get("description", "")))
@@ -249,10 +318,22 @@ def to_dnd5e_actor(
     for la in (monster.legendary_actions or []):
         items.append(_make_feat_item(la.get("name", ""), la.get("description", "")))
 
-    # Biography
+    # Biography and personality traits
     bio_html = ""
+    bio_public = ""
+    ideal_text = ""
+    bond_text = ""
+    flaw_text = ""
+
     if personality is not None:
+        # Public biography (description visible on hover)
+        bio_public = f"{personality.occupation}. {personality.voice}"
+        # Private biography (full details for DM)
         bio_html = personality.to_biography_html()
+        # Character traits for the Details tab
+        ideal_text = personality.ideal
+        bond_text = personality.bond
+        flaw_text = personality.flaw
     elif monster.tactical_summary:
         bio_html = f"<p><strong>Tactics:</strong> {monster.tactical_summary}</p>"
 
@@ -280,7 +361,7 @@ def to_dnd5e_actor(
                 "senses":   {**senses, "special": ""},
             },
             "details": {
-                "biography": {"value": bio_html, "public": ""},
+                "biography": {"value": bio_html, "public": bio_public},
                 "alignment":  monster.alignment,
                 "race":       "",
                 "type": {
@@ -292,6 +373,9 @@ def to_dnd5e_actor(
                 "cr":          cr_val,
                 "spellLevel":  0,
                 "source":      {"custom": "Homebrew"},
+                "ideal":       ideal_text,
+                "bond":        bond_text,
+                "flaw":        flaw_text,
             },
             "traits": {
                 "size": size_key,
@@ -306,6 +390,7 @@ def to_dnd5e_actor(
             "resources": {
                 "legact": {"value": 3 if monster.legendary_actions else 0, "max": 3 if monster.legendary_actions else 0},
             },
+            "spells": _build_spellcasting(monster.spellcasting) if monster.spellcasting else {},
         },
         "items": items,
         "prototypeToken": {
