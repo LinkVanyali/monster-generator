@@ -26,4 +26,7 @@ ENV HF_HOME=/app/cache/hf
 
 EXPOSE 8765
 
+HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=3 \
+  CMD curl -f http://localhost:${PORT:-8765}/health || exit 1
+
 CMD ["sh", "-c", "uvicorn api:app --host 0.0.0.0 --port ${PORT:-8765}"]
