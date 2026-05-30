@@ -34,7 +34,7 @@ docker-compose up -d
 1. In Foundry, go to **Add-on Modules** → **Install Module**
 2. Paste manifest URL:
    ```
-   https://raw.githubusercontent.com/YOUR_USERNAME/monster-generator/main/foundry-module/module.json
+   https://raw.githubusercontent.com/LinkVanyali/monster-generator/main/foundry-module/module.json
    ```
 3. Enable the module in your world
 4. Go to **Settings → Configure Settings → AI Monster Generator**
