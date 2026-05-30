@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+*.webp
+*.json
+!module.json
+!requirements.txt
+!monster_catalog.json
+!monsters_know_posts.json
+chroma_db/
+session_log.json
+.DS_Store
+5etools-src/
+5etools-img/

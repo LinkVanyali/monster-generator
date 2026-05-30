@@ -1,0 +1,22 @@
+services:
+  monster-generator:
+    build: .
+    container_name: monster-generator
+    restart: unless-stopped
+    ports:
+      - "8765:8765"
+    volumes:
+      - ./chroma_db:/app/chroma_db          # persist vector DB
+      - ./monster_catalog.json:/app/monster_catalog.json
+      - ./monsters_know_posts.json:/app/monsters_know_posts.json
+      - hf_cache:/cache/hf                  # persist downloaded models
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8765/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  hf_cache:

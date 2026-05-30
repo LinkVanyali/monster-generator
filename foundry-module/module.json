@@ -1,0 +1,21 @@
+{
+  "id": "monster-generator",
+  "title": "AI Monster Generator",
+  "description": "Generate D&D 5e monsters and encounters via Claude AI, directly into your world.",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "11",
+    "verified": "12"
+  },
+  "authors": [{ "name": "Homebrew" }],
+  "scripts": ["main.js"],
+  "styles": ["style.css"],
+  "languages": [{
+    "lang": "en",
+    "name": "English",
+    "path": "lang/en.json"
+  }],
+  "url": "https://github.com/YOUR_USERNAME/monster-generator",
+  "manifest": "https://raw.githubusercontent.com/YOUR_USERNAME/monster-generator/main/foundry-module/module.json",
+  "download": "https://github.com/YOUR_USERNAME/monster-generator/archive/refs/heads/main.zip"
+}

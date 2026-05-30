@@ -1,0 +1,41 @@
+#monster-generator-dialog .mgen-input {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 6px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+#monster-generator-dialog .mgen-status {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+  min-height: 18px;
+}
+
+#monster-generator-dialog .mgen-error {
+  color: #c00;
+  font-size: 12px;
+}
+
+.mgen-encounter-result {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.mgen-encounter-result h3 {
+  margin: 8px 0 4px;
+  font-size: 13px;
+  border-bottom: 1px solid #ccc;
+}
+
+.mgen-encounter-result .mgen-monster-row {
+  display: flex;
+  gap: 8px;
+  padding: 2px 0;
+  border-bottom: 1px dotted #eee;
+}
+
+.mgen-encounter-result .mgen-monster-name { font-weight: bold; flex: 2; }
+.mgen-encounter-result .mgen-monster-meta { color: #555; flex: 3; font-size: 11px; }

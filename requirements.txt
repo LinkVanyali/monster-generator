@@ -1,0 +1,16 @@
+anthropic==0.105.2
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+diffusers==0.38.0
+chromadb==1.5.9
+huggingface-hub==1.17.0
+langchain-chroma==1.1.0
+langchain-community==0.4.2
+langchain-core==1.4.0
+langchain-huggingface==1.2.2
+openai==2.38.0
+pillow==12.2.0
+python-dotenv==1.2.2
+rank-bm25==0.2.2
+sentence-transformers==5.5.1
+transformers==5.9.0
