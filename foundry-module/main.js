@@ -294,11 +294,50 @@ class MonsterPreviewDialog extends Dialog {
 
   async _onCreate(data) {
     try {
-      const actor = await Actor.create(data.actor);
+      // Upload token image if present
+      let tokenPath = null;
+      if (data.token) {
+        tokenPath = await this._uploadTokenImage(data.monster.name, data.token);
+      }
+
+      // Update actor with uploaded image path
+      const actorData = data.actor;
+      if (tokenPath) {
+        actorData.img = tokenPath;
+        actorData.prototypeToken.texture.src = tokenPath;
+      }
+
+      const actor = await Actor.create(actorData);
       ui.notifications.info(`Created: ${actor.name}`);
       actor.sheet.render(true);
     } catch (err) {
       ui.notifications.error(`Failed to create actor: ${err.message}`);
+    }
+  }
+
+  async _uploadTokenImage(monsterName, base64Data) {
+    try {
+      // Convert base64 to blob
+      const byteString = atob(base64Data);
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([ab], {type: "image/webp"});
+
+      // Generate filename
+      const filename = `${monsterName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.webp`;
+
+      // Create File object
+      const file = new File([blob], filename, {type: "image/webp"});
+
+      // Upload to Foundry
+      const result = await FilePicker.upload("data", "monsters", file, {});
+      return result.path;
+    } catch (err) {
+      console.error("Image upload failed:", err);
+      return null;
     }
   }
 }

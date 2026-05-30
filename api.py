@@ -31,6 +31,7 @@ from generator import MonsterGenerator
 from encounter import build_encounter
 from foundry_actor import to_dnd5e_actor
 from schemas import TargetMonsterOutput
+from image_generator import generate_token
 
 
 # ---------------------------------------------------------------------------
@@ -93,9 +94,20 @@ def generate(req: GenerateRequest):
         raise HTTPException(503, "Generator not ready")
     try:
         monster = _gen.generate(req.prompt)
+
+        # Generate token image (base64)
+        token_b64 = None
+        try:
+            hf_token = os.environ.get("HF_TOKEN")
+            if hf_token:
+                token_b64 = generate_token(monster, api_key=hf_token)
+        except Exception as img_err:
+            print(f"Token generation failed: {img_err}")
+
         return {
-            "actor":   to_dnd5e_actor(monster),
-            "monster": monster.model_dump(),   # raw schema for client-side use
+            "actor":   to_dnd5e_actor(monster),  # Module will set image after upload
+            "monster": monster.model_dump(),
+            "token":   token_b64,  # Base64 for module to upload
         }
     except Exception as e:
         raise HTTPException(500, str(e))
@@ -108,9 +120,20 @@ def mutate(req: MutateRequest):
     try:
         current = TargetMonsterOutput(**req.current)
         monster = _gen.mutate(current, req.request)
+
+        # Generate token image
+        token_b64 = None
+        try:
+            hf_token = os.environ.get("HF_TOKEN")
+            if hf_token:
+                token_b64 = generate_token(monster, api_key=hf_token)
+        except Exception as img_err:
+            print(f"Token generation failed: {img_err}")
+
         return {
             "actor":   to_dnd5e_actor(monster),
             "monster": monster.model_dump(),
+            "token":   token_b64,
         }
     except Exception as e:
         raise HTTPException(500, str(e))

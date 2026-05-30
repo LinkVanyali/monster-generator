@@ -310,13 +310,13 @@ def to_dnd5e_actor(
         items.append(_make_feat_item(t.get("name", ""), t.get("description", "")))
     # Actions
     for a in monster.actions:
-        if a.name.lower() == "multiattack":
-            items.append(_make_feat_item(a.name, a.description))
-        else:
-            items.append(_make_action_item(a))
+        items.append(_make_action_item(a))
     # Legendary actions
     for la in (monster.legendary_actions or []):
-        items.append(_make_feat_item(la.get("name", ""), la.get("description", "")))
+        # Legendary actions need activation type
+        item = _make_feat_item(la.get("name", ""), la.get("description", ""))
+        item["system"]["activation"] = {"type": "legendary", "cost": 1, "condition": ""}
+        items.append(item)
 
     # Biography and personality traits
     bio_html = ""
@@ -337,10 +337,8 @@ def to_dnd5e_actor(
     elif monster.tactical_summary:
         bio_html = f"<p><strong>Tactics:</strong> {monster.tactical_summary}</p>"
 
-    token_src = (
-        f"data:image/webp;base64,{token_b64}" if token_b64
-        else "icons/svg/mystery-man.svg"
-    )
+    # Default placeholder - module will update after upload
+    token_src = "icons/svg/mystery-man.svg"
 
     actor = {
         "name":   monster.name,
