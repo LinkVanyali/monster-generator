@@ -1,0 +1,8 @@
+# Send this to your friend privately (NOT in the public repo)
+# They should save it as .env in the monster-generator directory
+
+ANTHROPIC_API_KEY=your-actual-key-here
+HF_TOKEN=your-actual-token-here
+
+# Optional: path to Foundry data directory for auto-copying token images
+# FOUNDRY_DATA=/path/to/FoundryVTT/Data

@@ -39,3 +39,85 @@
 
 .mgen-encounter-result .mgen-monster-name { font-weight: bold; flex: 2; }
 .mgen-encounter-result .mgen-monster-meta { color: #555; flex: 3; font-size: 11px; }
+
+/* Monster preview dialog */
+#monster-preview-dialog {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+#monster-preview-dialog .mgen-preview-header h2 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  border-bottom: 2px solid #444;
+  padding-bottom: 4px;
+}
+
+#monster-preview-dialog .mgen-meta {
+  margin: 0 0 12px 0;
+  font-style: italic;
+  color: #666;
+}
+
+#monster-preview-dialog .mgen-preview-stats {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 12px;
+}
+
+#monster-preview-dialog .mgen-stat-row {
+  margin-bottom: 8px;
+}
+
+#monster-preview-dialog .mgen-stat-row strong {
+  margin-right: 8px;
+}
+
+#monster-preview-dialog .mgen-abilities {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+}
+
+#monster-preview-dialog .mgen-abilities span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#monster-preview-dialog .mgen-preview-section {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+#monster-preview-dialog .mgen-preview-section:last-of-type {
+  border-bottom: none;
+}
+
+#monster-preview-dialog .mgen-preview-section p {
+  margin: 4px 0;
+}
+
+#monster-preview-dialog .mgen-mutation-box {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 2px solid #ddd;
+}
+
+#monster-preview-dialog .mgen-mutation-box label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+#monster-preview-dialog .mgen-mutation-box input {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  font-size: 13px;
+}
